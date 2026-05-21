@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Done by Chris | Finance & AI Automation VA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream:      #f7f5f0;
+            --white:      #fdfcfa;
+            --navy:       #0b1d35;
+            --navy-mid:   #1a3454;
+            --navy-light: #2c4f72;
+            --gold:       #b8922a;
+            --gold-light: #d4a843;
+            --gold-pale:  #f0e4c4;
+            --text:       #1c2b3a;
+            --muted:      #7a8c9e;
+            --border:     #dde4ec;
+            --card:       #f0f4f8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Figtree', sans-serif;
+            background: var(--white);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ─── NAVBAR ──────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            z-index: 100;
+            padding: 1.1rem 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(253,252,250,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            transition: box-shadow 0.3s;
+        }
+        nav.scrolled { box-shadow: 0 2px 20px rgba(11,29,53,0.08); }
+
+        .logo {
+            font-family: 'Fraunces', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--navy);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        .logo span { color: var(--gold); }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.84rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.25s;
+        }
+        .nav-links a:hover { color: var(--navy); }
+
+        .nav-cta {
+            background: var(--navy);
+            color: var(--white);
+            padding: 0.6rem 1.5rem;
+            font-family: 'Figtree', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            transition: all 0.25s;
+            border-radius: 2px;
+        }
+        .nav-cta:hover {
+            background: var(--navy-mid);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(11,29,53,0.2);
+        }
+
+        /* ─── HERO ────────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            padding: 7rem 6% 4rem;
+            gap: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Diagonal background split */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 42%;
+            height: 100%;
+            background: var(--cream);
+            clip-path: polygon(8% 0, 100% 0, 100% 100%, 0% 100%);
+            z-index: 0;
+        }
+
+        /* Subtle dot grid */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(11,29,53,0.07) 1px, transparent 1px);
+            background-size: 28px 28px;
+            z-index: 0;
+            pointer-events: none;
+            mask-image: linear-gradient(to right, transparent 50%, rgba(0,0,0,0.4) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            background: var(--gold-pale);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            margin-bottom: 1.8rem;
+            animation: fadeUp 0.7s ease forwards;
+            opacity: 0;
+        }
+        .hero-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+            font-weight: 300;
+            line-height: 1.08;
+            letter-spacing: -0.02em;
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.7s ease 0.1s forwards;
+            opacity: 0;
+        }
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+        .hero-sub {
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.8;
+            max-width: 480px;
+            margin-bottom: 2.5rem;
+            animation: fadeUp 0.7s ease 0.2s forwards;
+            opacity: 0;
+        }
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeUp 0.7s ease 0.3s forwards;
+            opacity: 0;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: var(--white);
+            padding: 0.9rem 2.2rem;
+            font-family: 'Figtree', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 2px;
+        }
+        .btn-primary:hover {
+            background: var(--navy-mid);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11,29,53,0.2);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--navy);
+            padding: 0.9rem 2.2rem;
+            font-family: 'Figtree', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 500;
+            border: 1.5px solid var(--border);
+            cursor: pointer;
+            transition: all 0.25s;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 2px;
+        }
+        .btn-outline:hover {
+            border-color: var(--navy);
+            background: var(--cream);
+        }
+
+        /* Profile card */
+        .hero-card {
+            position: relative;
+            z-index: 2;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(11,29,53,0.1);
+        }
+        .profile-avatar {
+            width: 80px; height: 80px;
+            background: var(--navy);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+            overflow: hidden;
+        }
+        /* To add photo: replace the emoji span inside .profile-avatar with an <img> */
+        .hero-card h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--navy);
+            margin-bottom: 0.3rem;
+        }
+        .hero-card .role {
+            font-size: 0.8rem;
+            color: var(--gold);
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .card-stat {
+            background: var(--cream);
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .card-stat-num {
+            font-family: 'Fraunces', serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--navy);
+            display: block;
+        }
+        .card-stat-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .availability-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.78rem;
+            color: #2e7d32;
+            font-weight: 500;
+            background: #e8f5e9;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+        }
+        .availability-pill::before {
+            content: '';
+            width: 7px; height: 7px;
+            background: #43a047;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* ─── MARQUEE ─────────────────────────────── */
+        .marquee-strip {
+            background: var(--navy);
+            padding: 1rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .marquee-track {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+        .marquee-item {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin: 0 2rem;
+        }
+        .marquee-item.gold { color: var(--gold-light); }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        /* ─── SECTIONS ────────────────────────────── */
+        section { padding: 6rem 6%; }
+
+        .section-eyebrow {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+        .section-title {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+            font-weight: 300;
+            line-height: 1.15;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+        .section-title em {
+            font-style: italic;
+            color: var(--gold);
+        }
+        .section-desc {
+            font-size: 0.97rem;
+            font-weight: 300;
+            color: var(--muted);
+            max-width: 500px;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+
+        /* ─── SERVICES ────────────────────────────── */
+        #services { background: var(--white); }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .service-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 0;
+            background: var(--gold);
+            transition: height 0.35s ease;
+        }
+        .service-card:hover {
+            border-color: var(--gold-pale);
+            box-shadow: 0 8px 32px rgba(11,29,53,0.08);
+            transform: translateY(-3px);
+        }
+        .service-card:hover::before { height: 100%; }
+
+        .service-icon {
+            width: 44px; height: 44px;
+            background: var(--cream);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+        }
+        .service-card h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--navy);
+            margin-bottom: 0.6rem;
+        }
+        .service-card p {
+            font-size: 0.87rem;
+            color: var(--muted);
+            line-height: 1.75;
+            font-weight: 300;
+        }
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 1.2rem;
+        }
+        .service-tag {
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            color: var(--navy-light);
+            background: var(--card);
+            padding: 0.25rem 0.65rem;
+            border-radius: 100px;
+        }
+
+        /* ─── WHY CHRIS ────────────────────────────── */
+        #why { background: var(--cream); }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+        .why-content .big-quote {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--navy);
+            line-height: 1.4;
+            border-left: 3px solid var(--gold);
+            padding-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .why-content p {
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.85;
+            margin-bottom: 1rem;
+        }
+
+        .credentials {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .credential-item {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1.3rem 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            transition: box-shadow 0.3s;
+        }
+        .credential-item:hover {
+            box-shadow: 0 4px 20px rgba(11,29,53,0.07);
+        }
+        .credential-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .credential-item h4 {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.2rem;
+        }
+        .credential-item p {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* ─── TOOLS ────────────────────────────────── */
+        #tools { background: var(--navy); }
+        #tools .section-title { color: var(--white); }
+        #tools .section-eyebrow { color: var(--gold-light); }
+        #tools .section-desc { color: rgba(255,255,255,0.45); }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1px;
+            background: rgba(255,255,255,0.06);
+        }
+        .tool-item {
+            background: var(--navy);
+            padding: 1.8rem 1rem;
+            text-align: center;
+            transition: background 0.3s;
+            cursor: default;
+        }
+        .tool-item:hover { background: var(--navy-mid); }
+        .tool-item .tool-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+        .tool-item span {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.55);
+            letter-spacing: 0.06em;
+            display: block;
+        }
+
+        /* ─── VIDEOS ─────────────────────────────────  */
+        #work { background: var(--white); }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .video-card {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .video-card:hover {
+            box-shadow: 0 12px 40px rgba(11,29,53,0.1);
+            transform: translateY(-4px);
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+        }
+        .video-info { padding: 1.2rem 1.5rem 1.5rem; background: var(--white); }
+        .video-eyebrow {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+        .video-info h4 {
+            font-size: 0.97rem;
+            font-weight: 500;
+            color: var(--navy);
+            margin-top: 0.35rem;
+        }
+
+        /* ─── CONTACT ─────────────────────────────── */
+        #contact { background: var(--cream); }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 6rem;
+            align-items: start;
+        }
+        .contact-left h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 300;
+            color: var(--navy);
+            line-height: 1.15;
+            margin-bottom: 1.2rem;
+        }
+        .contact-left h2 em { font-style: italic; color: var(--gold); }
+        .contact-left p {
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        .contact-links { display: flex; flex-direction: column; gap: 0.7rem; }
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.88rem;
+            color: var(--navy-mid);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.25s;
+        }
+        .contact-link:hover { color: var(--gold); }
+        .contact-link-icon {
+            width: 34px; height: 34px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .contact-form {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .contact-form h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .form-group label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--navy);
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.8rem 1rem;
+            font-family: 'Figtree', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 400;
+            outline: none;
+            transition: border-color 0.25s, background 0.25s;
+            border-radius: 3px;
+            width: 100%;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--navy);
+            background: var(--white);
+        }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder { color: var(--muted); }
+        .form-group textarea { height: 110px; resize: none; }
+        .form-group select option { background: var(--white); }
+
+        .btn-submit {
+            background: var(--navy);
+            color: var(--white);
+            padding: 0.95rem 2rem;
+            font-family: 'Figtree', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            border-radius: 3px;
+            margin-top: 0.3rem;
+        }
+        .btn-submit:hover {
+            background: var(--navy-mid);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(11,29,53,0.2);
+        }
+
+        /* ─── FOOTER ──────────────────────────────── */
+        footer {
+            background: var(--navy);
+            padding: 2rem 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .footer-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.6);
+        }
+        .footer-logo span { color: var(--gold-light); }
+        footer p {
+            font-size: 0.76rem;
+            color: rgba(255,255,255,0.35);
+        }
+        .footer-links { display: flex; gap: 1.5rem; }
+        .footer-links a {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            transition: color 0.25s;
+        }
+        .footer-links a:hover { color: var(--gold-light); }
+
+        /* ─── ANIMATIONS ──────────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.4; }
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ─── RESPONSIVE ──────────────────────────── */
+        @media (max-width: 960px) {
+            .hero       { grid-template-columns: 1fr; }
+            .hero::before { display: none; }
+            .hero-card  { max-width: 360px; }
+            .why-grid   { grid-template-columns: 1fr; gap: 3rem; }
+            .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+        }
+        @media (max-width: 640px) {
+            .nav-links  { display: none; }
+            .form-row   { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ════════════════════════════════════════ -->
+<nav id="navbar">
+    <a class="logo" href="#home">Done <span>by Chris</span></a>
+    <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#why">About</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Hire Me</a>
+</nav>
+
+<!-- ═══ HERO ═════════════════════════════════════════ -->
+<section class="hero" id="home">
+    <div class="hero-content">
+        <span class="hero-badge">Available for New Clients</span>
+        <h1>Your <em>finance-grade</em><br>virtual assistant.</h1>
+        <p class="hero-sub">I combine 8 years of banking and financial analysis with AI automation skills to deliver work that's accurate, fast, and built to scale — so you can focus on what actually moves your business.</p>
+        <div class="hero-ctas">
+            <a href="#contact" class="btn-primary">Hire Me Now</a>
+            <a href="#services" class="btn-outline">See What I Do →</a>
+        </div>
+    </div>
+
+    <div class="hero-card fade-in">
+        <div class="profile-avatar">
+            <!--
+                ADD YOUR PHOTO:
+                Replace the span below with:
+                <img src="chris.jpg" alt="Christopher Dumantay" style="width:100%;height:100%;object-fit:cover;">
+            -->
+            <span>👤</span>
+        </div>
+        <h3>Christopher Dumantay</h3>
+        <div class="role">Finance &amp; Automation VA</div>
+
+        <div class="card-stats">
+            <div class="card-stat">
+                <span class="card-stat-num">8</span>
+                <span class="card-stat-label">Yrs Experience</span>
+            </div>
+            <div class="card-stat">
+                <span class="card-stat-num">50+</span>
+                <span class="card-stat-label">Automations Built</span>
+            </div>
+            <div class="card-stat">
+                <span class="card-stat-num">PH</span>
+                <span class="card-stat-label">Based · UTC+8</span>
+            </div>
+            <div class="card-stat">
+                <span class="card-stat-num">AI</span>
+                <span class="card-stat-label">Excel · n8n</span>
+            </div>
+        </div>
+
+        <div class="availability-pill">Currently accepting clients</div>
+    </div>
+</section>
+
+<!-- ═══ MARQUEE ═══════════════════════════════════════ -->
+<div class="marquee-strip">
+    <div class="marquee-track">
+        <span class="marquee-item gold">Financial Reporting</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">n8n Automation</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item gold">AI Workflows</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Excel VBA</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item gold">Account Reconciliation</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Process Documentation</span>
+        <span class="marquee-item">·</span>
+        <!-- duplicate for seamless loop -->
+        <span class="marquee-item gold">Financial Reporting</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">n8n Automation</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item gold">AI Workflows</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Excel VBA</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item gold">Account Reconciliation</span>
+        <span class="marquee-item">·</span>
+        <span class="marquee-item">Process Documentation</span>
+        <span class="marquee-item">·</span>
+    </div>
+</div>
+
+<!-- ═══ SERVICES ══════════════════════════════════════ -->
+<section id="services">
+    <span class="section-eyebrow fade-in">What I Offer</span>
+    <h2 class="section-title fade-in">Specialized skills.<br><em>Real results.</em></h2>
+    <p class="section-desc fade-in">Not your average VA — I bring analyst-level precision to every task, with the added edge of AI automation to get things done faster.</p>
+
+    <div class="services-grid">
+        <div class="service-card fade-in">
+            <div class="service-icon">📊</div>
+            <h3>Financial Reporting & Analysis</h3>
+            <p>Month-end reports, variance analysis, reconciliation, journal entries, and financial models — delivered with the accuracy of a banking analyst.</p>
+            <div class="service-tags">
+                <span class="service-tag">Excel</span>
+                <span class="service-tag">Reconciliation</span>
+            </div>
+        </div>
+        <div class="service-card fade-in">
+            <div class="service-icon">⚡</div>
+            <h3>AI & Workflow Automation</h3>
+            <p>Build n8n, Make, or Zapier workflows to automate your repetitive business tasks — lead capture, reporting, notifications, and more.</p>
+            <div class="service-tags">
+                <span class="service-tag">n8n</span>
+                <span class="service-tag">Make.com</span>
+                <span class="service-tag">Zapier</span>
+            </div>
+        </div>
+
+        <div class="service-card fade-in">
+            <div class="service-icon">🤖</div>
+            <h3>AI-Powered Admin Support</h3>
+            <p>Research, summarization, email management, document drafting, and data processing — all supercharged with Claude, ChatGPT, and Perplexity.</p>
+            <div class="service-tags">
+                <span class="service-tag">Claude AI</span>
+                <span class="service-tag">ChatGPT</span>
+                <span class="service-tag">Perplexity</span>
+            </div>
+        </div>
+        <div class="service-card fade-in">
+            <div class="service-icon">📋</div>
+            <h3>Process Documentation & SOPs</h3>
+            <p>Documented workflows, SOPs, and process maps that make your operations repeatable, trainable, and audit-ready.</p>
+            <div class="service-tags">
+                <span class="service-tag">Notion</span>
+                <span class="service-tag">Excel VBA</span>
+                <span class="service-tag">Process Design</span>
+            </div>
+        </div>
+        <div class="service-card fade-in">
+            <div class="service-icon">📱</div>
+            <h3>Social Media Automation</h3>
+            <p>Schedule posts, auto-reply to DMs, capture leads from comments, and nurture your audience — all running automatically while you focus elsewhere.</p>
+            <div class="service-tags">
+                <span class="service-tag">n8n</span>
+                <span class="service-tag">Meta API</span>
+                <span class="service-tag">Auto-Scheduling</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ WHY CHRIS ══════════════════════════════════════ -->
+<section id="why">
+    <div class="why-grid">
+        <div class="why-content">
+            <span class="section-eyebrow fade-in">Why Work With Me</span>
+            <p class="big-quote fade-in">"I don't just execute tasks — I understand the business context behind them."</p>
+            <p class="fade-in">With 8 years inside major financial institutions' finance and operations teams, I've done the work most VAs are supporting. That means I catch errors others miss, ask the right questions, and deliver outputs that actually make sense for your goals.</p>
+            <p class="fade-in">I've led process improvement initiatives, built financial models under regulatory scrutiny, and automated reporting workflows that run without babysitting. Now I bring all of that to small businesses and founders who need that level of quality without hiring full-time.</p>
+        </div>
+
+        <div class="credentials">
+            <div class="credential-item fade-in">
+                <span class="credential-icon">🏦</span>
+                <div>
+                    <h4>Senior Financial Analyst — 6+ Years</h4>
+                    <p>Balance Sheet Control, Liquidity Stress Testing, and process improvement. Regulatory-grade accuracy on every deliverable.</p>
+                </div>
+            </div>
+            <div class="credential-item fade-in">
+                <span class="credential-icon">🎓</span>
+                <div>
+                    <h4>BS Accountancy</h4>
+                    <p>BS Accountancy graduate. Strong foundation in financial principles and controls.</p>
+                </div>
+            </div>
+            <div class="credential-item fade-in">
+                <span class="credential-icon">📜</span>
+                <div>
+                    <h4>Google Data Analytics Certificate</h4>
+                    <p>Professional certification in progress (2026) — data analysis, visualization, and storytelling.</p>
+                </div>
+            </div>
+            <div class="credential-item fade-in">
+                <span class="credential-icon">🤖</span>
+                <div>
+                    <h4>AI Automation Specialist</h4>
+                    <p>Certified in n8n, Make, Zapier, and prompt engineering for real-world business automation.</p>
+                </div>
+            </div>
+            <div class="credential-item fade-in">
+                <span class="credential-icon">📍</span>
+                <div>
+                    <h4>Based in Manila, PH</h4>
+                    <p>Available for PH clients and international remote work. PH timezone (UTC+8).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ TOOLS ══════════════════════════════════════════ -->
+<section id="tools">
+    <span class="section-eyebrow fade-in">My Stack</span>
+    <h2 class="section-title fade-in">Tools I work <em>fluently</em> in.</h2>
+    <p class="section-desc fade-in">Not just familiar with — actually use these daily to deliver client work.</p>
+
+    <div class="tools-grid">
+        <div class="tool-item fade-in"><div class="tool-icon">🔄</div><span>n8n</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">⚙️</div><span>Make.com</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">⚡</div><span>Zapier</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">📗</div><span>Excel VBA</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">🔬</div><span>Knime</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">🤖</div><span>Claude AI</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">💬</div><span>ChatGPT</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">🔍</div><span>Perplexity</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">📋</div><span>Notion</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">📅</div><span>Google Suite</span></div>
+        <div class="tool-item fade-in"><div class="tool-icon">🌐</div><span>REST APIs</span></div>
+    </div>
+</section>
+
+<!-- ═══ WORK / YOUTUBE ════════════════════════════════ -->
+<section id="work">
+    <span class="section-eyebrow fade-in">Work Samples</span>
+    <h2 class="section-title fade-in">Watch me <em>build</em> it.</h2>
+    <p class="section-desc fade-in">Real projects. Behind-the-scenes builds recorded so you can see exactly how I work and what you'll get.</p>
+
+    <div class="video-grid">
+        <!--
+            HOW TO ADD YOUR YOUTUBE VIDEOS:
+            1. Open your YouTube video
+            2. Copy the ID from the URL → youtube.com/watch?v=COPY_THIS_PART
+            3. Replace VIDEO_ID_1 / VIDEO_ID_2 / VIDEO_ID_3 with your actual IDs
+            4. Update the eyebrow label and title for each card
+        -->
+        <div class="video-card fade-in">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID_1"
+                    title="Work Sample 1"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen loading="lazy">
+                </iframe>
+            </div>
+            <div class="video-info">
+                <span class="video-eyebrow">n8n Build · Automation</span>
+                <h4>Replace with your video title</h4>
+            </div>
+        </div>
+        <div class="video-card fade-in">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID_2"
+                    title="Work Sample 2"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen loading="lazy">
+                </iframe>
+            </div>
+            <div class="video-info">
+                <span class="video-eyebrow">Finance · Reporting</span>
+                <h4>Replace with your video title</h4>
+            </div>
+        </div>
+        <div class="video-card fade-in">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID_3"
+                    title="Work Sample 3"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen loading="lazy">
+                </iframe>
+            </div>
+            <div class="video-info">
+                <span class="video-eyebrow">Excel · Data Work</span>
+                <h4>Replace with your video title</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ CONTACT ════════════════════════════════════════ -->
+<section id="contact">
+    <div class="contact-grid">
+        <div class="contact-left">
+            <span class="section-eyebrow fade-in">Let's Work Together</span>
+            <h2 class="fade-in">Ready to get<br>some work <em>done?</em></h2>
+            <p class="fade-in">Tell me what you need — whether it's a one-off project or ongoing VA support. I'll get back to you within 24 hours.</p>
+            <div class="contact-links fade-in">
+                <a href="mailto:cadfreelance15@gmail.com" class="contact-link">
+                    <div class="contact-link-icon">📧</div>
+                    cadfreelance15@gmail.com
+                </a>
+                <a href="https://linkedin.com/in/christopherdumantay/" target="_blank" class="contact-link">
+                    <div class="contact-link-icon">💼</div>
+                    linkedin.com/in/christopherdumantay
+                </a>
+                <!-- Update with your Calendly link -->
+                <a href="https://calendly.com/your-link" target="_blank" class="contact-link">
+                    <div class="contact-link-icon">📅</div>
+                    Book a discovery call
+                </a>
+                <a href="https://youtube.com/@your-channel" target="_blank" class="contact-link">
+                    <div class="contact-link-icon">▶️</div>
+                    YouTube Channel
+                </a>
+            </div>
+        </div>
+
+        <div class="contact-form fade-in">
+            <h3>Send me a message</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" placeholder="Juan dela Cruz" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="juan@business.com" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>What do you need help with?</label>
+                <select>
+                    <option value="" disabled selected>Select a service...</option>
+                    <option>Financial Reporting & Analysis</option>
+                    <option>AI & Workflow Automation</option>
+                    
+                    <option>AI-Powered Admin Support</option>
+                    <option>Process Documentation & SOPs</option>
+                    <option>Social Media Automation</option>
+                    <option>Something else</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tell me more</label>
+                <textarea placeholder="Briefly describe the task or project..."></textarea>
+            </div>
+            <button type="button" class="btn-submit" onclick="handleSubmit(this)">Send Message →</button>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════ -->
+<footer>
+    <div class="footer-logo">Done <span>by Chris</span></div>
+    <p>© 2026 Christopher Dumantay · Manila, Philippines</p>
+    <div class="footer-links">
+        <a href="https://linkedin.com/in/christopherdumantay/" target="_blank">LinkedIn</a>
+        <a href="https://youtube.com/@your-channel" target="_blank">YouTube</a>
+        <a href="mailto:cadfreelance15@gmail.com">Email</a>
+    </div>
+</footer>
+
+<script>
+    // Scroll-triggered fade-in
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+                setTimeout(() => e.target.classList.add('visible'), i * 65);
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+    // Sticky nav shadow
+    window.addEventListener('scroll', () => {
+        document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const t = document.querySelector(a.getAttribute('href'));
+            if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Form submit
+    function handleSubmit(btn) {
+        btn.textContent = 'Sent! I\'ll be in touch ✓';
+        btn.style.background = '#2e7d32';
+        btn.disabled = true;
+        // Connect to Formspree: <form action="https://formspree.io/f/YOUR_ID" method="POST">
+        // or EmailJS for no-backend sending
+    }
+</script>
+
+</body>
+</html>
