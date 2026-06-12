@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Done by Chris — Automation Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0a;
+        --ink: #ededed;
+        --dim: #555;
+        --faint: #2a2a2a;
+        --line: #1c1c1c;
+        --accent: #c8f04a;
+        --mono: 'JetBrains Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    ::selection { background: var(--accent); color: #0a0a0a; }
+
+    body {
+        font-family: 'Archivo', sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── SCROLL PROGRESS BAR ── */
+    .progress {
+        position: fixed;
+        top: 0; left: 0;
+        height: 2px;
+        background: var(--accent);
+        width: 0%;
+        z-index: 200;
+        transition: width 0.1s linear;
+    }
+
+    /* ── NAV ── */
+    nav {
+        position: fixed;
+        top: 0; width: 100%;
+        z-index: 100;
+        padding: 0 4%;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        mix-blend-mode: difference;
+    }
+    .logo {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: #fff;
+    }
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: rgba(255,255,255,0.45);
+        letter-spacing: 0.04em;
+        transition: color 0.25s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-time {
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        color: rgba(255,255,255,0.35);
+        letter-spacing: 0.04em;
+    }
+
+    /* ── HERO ── */
+    #hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 80px 4% 140px;
+        position: relative;
+    }
+
+    .hero-meta {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--dim);
+        letter-spacing: 0.06em;
+        margin-bottom: 2.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        opacity: 0;
+        animation: fadeIn 0.8s ease 1.4s forwards;
+    }
+    .pulse {
+        width: 6px; height: 6px;
+        background: var(--accent);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+        0%,100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero-h {
+        font-size: clamp(3rem, 10vw, 9.5rem);
+        font-weight: 200;
+        letter-spacing: -0.045em;
+        line-height: 0.98;
+        color: var(--ink);
+        text-transform: none;
+    }
+    .hero-h .w {
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: bottom;
+    }
+    .hero-h .w span {
+        display: inline-block;
+        transform: translateY(110%);
+        animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .hero-h .bold { font-weight: 800; }
+    .hero-h .accent-w { color: var(--accent); }
+    @keyframes rise { to { transform: translateY(0); } }
+
+    .hero-foot {
+        position: absolute;
+        bottom: 3rem;
+        left: 4%; right: 4%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        opacity: 0;
+        animation: fadeIn 0.8s ease 1.8s forwards;
+    }
+    .hero-foot p {
+        font-size: 0.85rem;
+        font-weight: 300;
+        color: var(--dim);
+        max-width: 340px;
+        line-height: 1.7;
+    }
+    .scroll-cue {
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        color: var(--dim);
+        letter-spacing: 0.1em;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .scroll-cue::after {
+        content: '';
+        width: 40px; height: 1px;
+        background: var(--dim);
+        animation: stretch 2s ease-in-out infinite;
+    }
+    @keyframes stretch {
+        0%,100% { transform: scaleX(1); }
+        50% { transform: scaleX(0.5); }
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 8rem 4%; border-top: 1px solid var(--line); }
+
+    .sec-tag {
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        color: var(--dim);
+        letter-spacing: 0.12em;
+        margin-bottom: 3rem;
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+    }
+    .sec-tag::before {
+        content: '';
+        width: 24px; height: 1px;
+        background: var(--accent);
+        align-self: center;
+    }
+
+    /* reveal on scroll */
+    .rv {
+        opacity: 0;
+        transform: translateY(36px);
+        transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+    .rv.in { opacity: 1; transform: translateY(0); }
+
+    /* ── STATEMENT ── */
+    #statement { padding: 10rem 4%; }
+    .statement-text {
+        font-size: clamp(1.6rem, 4vw, 3.2rem);
+        font-weight: 300;
+        letter-spacing: -0.03em;
+        line-height: 1.25;
+        max-width: 900px;
+        color: var(--faint);
+    }
+    .statement-text .lit { color: var(--ink); transition: color 0.4s; }
+    .statement-text .hl { color: var(--accent); }
+
+    /* ── SERVICES ── */
+    .svc-stack {}
+    .svc {
+        display: grid;
+        grid-template-columns: 80px 1fr auto;
+        gap: 2.5rem;
+        align-items: baseline;
+        padding: 2.2rem 0;
+        border-bottom: 1px solid var(--line);
+        cursor: default;
+        position: relative;
+    }
+    .svc:last-child { border-bottom: none; }
+
+    .svc-i {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--dim);
+        letter-spacing: 0.08em;
+    }
+    .svc-t {
+        font-size: clamp(1.4rem, 3.2vw, 2.6rem);
+        font-weight: 300;
+        letter-spacing: -0.03em;
+        color: var(--ink);
+        transition: font-weight 0.3s, color 0.3s, transform 0.4s cubic-bezier(0.22,1,0.36,1);
+        line-height: 1.1;
+    }
+    .svc:hover .svc-t {
+        font-weight: 700;
+        color: var(--accent);
+        transform: translateX(12px);
+    }
+    .svc-d {
+        font-size: 0.78rem;
+        font-weight: 300;
+        color: var(--dim);
+        max-width: 300px;
+        line-height: 1.7;
+        text-align: right;
+    }
+    .svc-tools {
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        color: var(--faint);
+        letter-spacing: 0.05em;
+        display: block;
+        margin-top: 0.5rem;
+        transition: color 0.3s;
+    }
+    .svc:hover .svc-tools { color: var(--dim); }
+
+    /* ── ABOUT ── */
+    .about-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6rem;
+        align-items: start;
+    }
+    .about-left {}
+    .about-big {
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        font-weight: 200;
+        letter-spacing: -0.035em;
+        line-height: 1.12;
+        color: var(--ink);
+        margin-bottom: 2.5rem;
+    }
+    .about-big strong { font-weight: 800; }
+
+    .finance-note {
+        border-left: 2px solid var(--accent);
+        padding: 0.4rem 0 0.4rem 1.4rem;
+        margin-bottom: 2rem;
+    }
+    .finance-note .fn-label {
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        color: var(--accent);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    .finance-note p {
+        font-size: 0.82rem;
+        font-weight: 300;
+        color: var(--dim);
+        line-height: 1.75;
+    }
+
+    .about-right {}
+    .about-photo {
+        width: 100%;
+        aspect-ratio: 4/5;
+        background: #111;
+        border: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        filter: grayscale(1);
+        transition: filter 0.5s;
+    }
+    .about-photo:hover { filter: grayscale(0); }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+    .photo-cap {
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        color: var(--dim);
+        letter-spacing: 0.08em;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .facts { margin-top: 2.5rem; }
+    .fact {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.8rem;
+    }
+    .fact:last-child { border-bottom: none; }
+    .fact-k {
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        color: var(--dim);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+    .fact-v { color: #999; font-weight: 300; }
+
+    /* ── COUNTERS ── */
+    #numbers {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        padding: 6rem 4%;
+    }
+    .num-block { text-align: left; }
+    .num-val {
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        font-weight: 100;
+        letter-spacing: -0.05em;
+        line-height: 1;
+        color: var(--ink);
+        display: block;
+        font-variant-numeric: tabular-nums;
+    }
+    .num-val .plus { color: var(--accent); font-weight: 300; }
+    .num-cap {
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        color: var(--dim);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 0.8rem;
+        display: block;
+    }
+
+    /* ── WORK / CATALOGUE ── */
+    .proj-stack { display: flex; flex-direction: column; }
+
+    .proj {
+        padding: 2.5rem 0;
+        border-bottom: 1px solid var(--line);
+        transition: background 0.2s;
+    }
+    .proj:last-child { border-bottom: none; }
+
+    .proj-head {
+        display: flex;
+        align-items: baseline;
+        gap: 1.5rem;
+        margin-bottom: 1.2rem;
+    }
+    .proj-i {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--dim);
+        letter-spacing: 0.08em;
+        flex-shrink: 0;
+    }
+    .proj-t {
+        font-size: clamp(1.2rem, 2.6vw, 1.9rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        flex: 1;
+        transition: color 0.3s;
+    }
+    .proj:hover .proj-t { color: var(--accent); }
+    .proj-tag {
+        font-family: var(--mono);
+        font-size: 0.6rem;
+        color: var(--dim);
+        border: 1px solid var(--line);
+        padding: 0.25rem 0.7rem;
+        letter-spacing: 0.1em;
+        flex-shrink: 0;
+    }
+
+    .proj-flow {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.2rem;
+        padding-left: calc(0.68rem * 4 + 1.5rem);
+    }
+    .fl {
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        color: #888;
+        background: #121212;
+        border: 1px solid var(--line);
+        padding: 0.4rem 0.8rem;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+        transition: border-color 0.3s, color 0.3s;
+    }
+    .proj:hover .fl { border-color: #2e2e2e; color: #aaa; }
+    .fa {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--accent);
+    }
+
+    .proj-d {
+        font-size: 0.8rem;
+        font-weight: 300;
+        color: var(--dim);
+        line-height: 1.75;
+        max-width: 560px;
+        padding-left: calc(0.68rem * 4 + 1.5rem);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+        padding: 10rem 4% 6rem;
+        text-align: left;
+    }
+    .contact-h {
+        font-size: clamp(2.2rem, 10vw, 10rem);
+        font-weight: 200;
+        letter-spacing: -0.05em;
+        line-height: 1.0;
+        color: var(--ink);
+        margin-bottom: 3rem;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+    .contact-h .accent-w { color: var(--accent); font-weight: 800; }
+    .contact-h a {
+        position: relative;
+        display: inline-block;
+        transition: color 0.3s;
+    }
+    .contact-h a::after {
+        content: '';
+        position: absolute;
+        bottom: 0.08em; left: 0;
+        width: 100%; height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+    }
+    .contact-h a:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
+    .contact-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+    .contact-note {
+        font-size: 0.82rem;
+        font-weight: 300;
+        color: var(--dim);
+        max-width: 320px;
+        line-height: 1.75;
+    }
+    .contact-links {
+        display: flex;
+        gap: 2rem;
+    }
+    .cl {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--dim);
+        letter-spacing: 0.06em;
+        transition: color 0.25s;
+        position: relative;
+    }
+    .cl:hover { color: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+        border-top: 1px solid var(--line);
+        padding: 1.5rem 4%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    footer span {
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        color: var(--faint);
+        letter-spacing: 0.06em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+        .about-wrap { grid-template-columns: 1fr; gap: 3rem; }
+        .proj-flow, .proj-d { padding-left: 0; }
+        #numbers { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 4%; }
+        .svc { grid-template-columns: 40px 1fr; gap: 1.2rem; }
+        .svc-d { display: none; }
+        .nav-links { display: none; }
+        section { padding: 5rem 5%; }
+        #statement { padding: 6rem 5%; }
+    }
+
+    @media (max-width: 640px) {
+        #hero {
+            min-height: auto;
+            padding: 110px 5% 3rem;
+            justify-content: flex-start;
+        }
+        .hero-h {
+            font-size: clamp(2.4rem, 13vw, 4rem);
+            line-height: 1.05;
+        }
+        .hero-foot {
+            position: static;
+            margin-top: 3rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+        .hero-meta { margin-bottom: 1.8rem; font-size: 0.62rem; }
+        .contact-h { font-size: clamp(2rem, 12vw, 3.5rem); }
+        .contact-row { flex-direction: column; align-items: flex-start; }
+        .contact-links { flex-wrap: wrap; gap: 1.2rem; }
+        .statement-text { font-size: clamp(1.2rem, 6vw, 1.8rem); }
+        .svc-t { font-size: clamp(1.2rem, 6vw, 1.8rem); }
+        .num-val { font-size: clamp(3rem, 16vw, 4.5rem); }
+        .nav-time { display: none; }
+        .about-big { font-size: clamp(1.5rem, 8vw, 2.2rem); }
+        footer { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- NAV -->
+<nav>
+    <span class="logo">DONE_BY_CHRIS</span>
+    <div class="nav-right">
+        <ul class="nav-links">
+            <li><a href="#services">services</a></li>
+            <li><a href="#about">about</a></li>
+            <li><a href="#work">work</a></li>
+            <li><a href="#contact">contact</a></li>
+        </ul>
+        <span class="nav-time" id="clock">MNL --:--</span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="border-top:none;">
+    <div class="hero-meta">
+        <div class="pulse"></div>
+        OPEN FOR PROJECTS — MANILA / REMOTE
+    </div>
+    <h1 class="hero-h">
+        <span class="w"><span style="animation-delay:0.1s;">I</span></span>
+        <span class="w"><span style="animation-delay:0.18s;">build</span></span>
+        <span class="w"><span class="bold" style="animation-delay:0.26s;">automations</span></span><br>
+        <span class="w"><span style="animation-delay:0.4s;">that</span></span>
+        <span class="w"><span style="animation-delay:0.48s;">run</span></span>
+        <span class="w"><span style="animation-delay:0.56s;">your</span></span>
+        <span class="w"><span style="animation-delay:0.64s;">business</span></span><br>
+        <span class="w"><span class="accent-w bold" style="animation-delay:0.8s;">while</span></span>
+        <span class="w"><span class="accent-w bold" style="animation-delay:0.88s;">you</span></span>
+        <span class="w"><span class="accent-w bold" style="animation-delay:0.96s;">sleep.</span></span>
+    </h1>
+    <div class="hero-foot">
+        <p>AI-powered workflows, integrations, and bots — designed to eliminate repetitive work, built to run without supervision.</p>
+        <span class="scroll-cue">SCROLL</span>
+    </div>
+</section>
+
+<!-- STATEMENT (scroll-lit text) -->
+<section id="statement">
+    <p class="statement-text" id="stmt">
+        <span>Every</span> <span>business</span> <span>runs</span> <span>on</span> <span>repetitive</span> <span>tasks.</span>
+        <span>Copy-pasting</span> <span>data.</span> <span>Sending</span> <span>follow-ups.</span> <span>Updating</span> <span>sheets.</span>
+        <span>Replying</span> <span>to</span> <span>the</span> <span>same</span> <span>questions.</span>
+        <span class="hl">I</span> <span class="hl">make</span> <span class="hl">all</span> <span class="hl">of</span> <span class="hl">that</span> <span class="hl">disappear.</span>
+    </p>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+    <div class="sec-tag">001 — SERVICES</div>
+    <div class="svc-stack">
+        <div class="svc rv">
+            <span class="svc-i">/01</span>
+            <div>
+                <div class="svc-t">Workflow Automation</div>
+                <span class="svc-tools">n8n · make.com · zapier</span>
+            </div>
+            <p class="svc-d">End-to-end workflows that connect your tools and eliminate manual handoffs — running 24/7, zero supervision.</p>
+        </div>
+        <div class="svc rv">
+            <span class="svc-i">/02</span>
+            <div>
+                <div class="svc-t">Social Media Automation</div>
+                <span class="svc-tools">n8n · meta api</span>
+            </div>
+            <p class="svc-d">Auto-scheduling, DM replies, lead capture from comments — your channels on autopilot.</p>
+        </div>
+        <div class="svc rv">
+            <span class="svc-i">/03</span>
+            <div>
+                <div class="svc-t">AI Assistants & Bots</div>
+                <span class="svc-tools">claude · chatgpt · n8n</span>
+            </div>
+            <p class="svc-d">Custom chatbots that answer FAQs, qualify leads, and book appointments — trained on your business.</p>
+        </div>
+        <div class="svc rv">
+            <span class="svc-i">/04</span>
+            <div>
+                <div class="svc-t">Data Processing & Reports</div>
+                <span class="svc-tools">excel · knime · sheets</span>
+            </div>
+            <p class="svc-d">Automated reports, clean data, structured summaries — the right info at the right time.</p>
+        </div>
+        <div class="svc rv">
+            <span class="svc-i">/05</span>
+            <div>
+                <div class="svc-t">SOPs & Documentation</div>
+                <span class="svc-tools">notion · excel vba</span>
+            </div>
+            <p class="svc-d">Process maps and SOPs that make your operations repeatable and ready to scale.</p>
+        </div>
+        <div class="svc rv">
+            <span class="svc-i">/06</span>
+            <div>
+                <div class="svc-t">Custom Builds</div>
+                <span class="svc-tools">n8n · rest apis</span>
+            </div>
+            <p class="svc-d">Anything under the sun. If it's repetitive and manual, I can automate it.</p>
+        </div>
+    </div>
+</section>
+
+<!-- NUMBERS -->
+<section id="numbers">
+    <div class="num-block rv">
+        <span class="num-val" data-count="20">0<span class="plus">+</span></span>
+        <span class="num-cap">Automations built</span>
+    </div>
+    <div class="num-block rv">
+        <span class="num-val" data-count="8">0</span>
+        <span class="num-cap">Years of employment experience</span>
+    </div>
+    <div class="num-block rv">
+        <span class="num-val"><span class="plus">&lt;</span>1</span>
+        <span class="num-cap">Year in n8n · Make · Zapier — and counting</span>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="sec-tag">002 — ABOUT</div>
+    <div class="about-wrap">
+        <div class="about-left rv">
+            <h2 class="about-big">I'm Christopher.<br>I find inefficiency<br><strong>and delete it.</strong></h2>
+
+            <div class="finance-note">
+                <span class="fn-label">Where I come from</span>
+                <p>8 years in banking & finance operations — reconciliations, process improvement, and systems work under strict regulatory standards. That discipline is in every automation I ship.</p>
+            </div>
+
+            <div class="facts">
+                <div class="fact">
+                    <span class="fact-k">Education</span>
+                    <span class="fact-v">BS Accountancy</span>
+                </div>
+                <div class="fact">
+                    <span class="fact-k">Certification</span>
+                    <span class="fact-v">Google Data Analytics (2026, ongoing)</span>
+                </div>
+                <div class="fact">
+                    <span class="fact-k">Specialty</span>
+                    <span class="fact-v">n8n · Make · Zapier · AI tools</span>
+                </div>
+                <div class="fact">
+                    <span class="fact-k">Location</span>
+                    <span class="fact-v">Manila, PH — Remote worldwide</span>
+                </div>
+            </div>
+        </div>
+        <div class="about-right rv">
+            <div class="about-photo">
+                <img src="chris.jpg" alt="Christopher Dumantay">
+            </div>
+            <div class="photo-cap">
+                <span>CHRISTOPHER DUMANTAY</span>
+                <span>EST. MANILA</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+    <div class="sec-tag">003 — AUTOMATION CATALOGUE</div>
+    <div class="proj-stack">
+
+        <div class="proj rv">
+            <div class="proj-head">
+                <span class="proj-i">/01</span>
+                <h3 class="proj-t">Lead Capture & Auto Follow-Up</h3>
+                <span class="proj-tag">SALES</span>
+            </div>
+            <div class="proj-flow">
+                <span class="fl">Facebook Lead Form</span>
+                <span class="fa">→</span>
+                <span class="fl">n8n</span>
+                <span class="fa">→</span>
+                <span class="fl">Google Sheets</span>
+                <span class="fa">→</span>
+                <span class="fl">Auto Email + SMS</span>
+            </div>
+            <p class="proj-d">New leads from Facebook ads are instantly logged to a master sheet, tagged by campaign, and receive a personalized follow-up within 60 seconds — no manual entry, no leads left cold.</p>
+        </div>
+
+        <div class="proj rv">
+            <div class="proj-head">
+                <span class="proj-i">/02</span>
+                <h3 class="proj-t">Daily Sales Report Digest</h3>
+                <span class="proj-tag">REPORTING</span>
+            </div>
+            <div class="proj-flow">
+                <span class="fl">Shopee / Lazada</span>
+                <span class="fa">→</span>
+                <span class="fl">n8n</span>
+                <span class="fa">→</span>
+                <span class="fl">Excel Summary</span>
+                <span class="fa">→</span>
+                <span class="fl">Email @ 7AM</span>
+            </div>
+            <p class="proj-d">Pulls yesterday's orders from multiple platforms overnight, consolidates them into one clean summary with totals and top products, and delivers it to your inbox before you start your day.</p>
+        </div>
+
+        <div class="proj rv">
+            <div class="proj-head">
+                <span class="proj-i">/03</span>
+                <h3 class="proj-t">AI Customer Inquiry Responder</h3>
+                <span class="proj-tag">AI BOT</span>
+            </div>
+            <div class="proj-flow">
+                <span class="fl">Messenger / WhatsApp</span>
+                <span class="fa">→</span>
+                <span class="fl">n8n + Claude AI</span>
+                <span class="fa">→</span>
+                <span class="fl">Auto Reply</span>
+                <span class="fa">→</span>
+                <span class="fl">Human Escalation</span>
+            </div>
+            <p class="proj-d">An AI agent trained on your FAQs and product catalog answers common questions instantly, around the clock — and hands off complex conversations to a human with full context attached.</p>
+        </div>
+
+        <div class="proj rv">
+            <div class="proj-head">
+                <span class="proj-i">/04</span>
+                <h3 class="proj-t">Invoice Generation & Payment Chaser</h3>
+                <span class="proj-tag">ADMIN</span>
+            </div>
+            <div class="proj-flow">
+                <span class="fl">Google Form / Sheet</span>
+                <span class="fa">→</span>
+                <span class="fl">n8n</span>
+                <span class="fa">→</span>
+                <span class="fl">PDF Invoice</span>
+                <span class="fa">→</span>
+                <span class="fl">Follow-up Until Paid</span>
+            </div>
+            <p class="proj-d">Generates branded PDF invoices from a simple form entry, emails them to clients, and automatically sends polite payment reminders on a schedule — stopping the moment payment is marked received.</p>
+        </div>
+
+        <div class="proj rv">
+            <div class="proj-head">
+                <span class="proj-i">/05</span>
+                <h3 class="proj-t">Social Media Content Scheduler</h3>
+                <span class="proj-tag">SOCIAL</span>
+            </div>
+            <div class="proj-flow">
+                <span class="fl">Notion Content Bank</span>
+                <span class="fa">→</span>
+                <span class="fl">n8n</span>
+                <span class="fa">→</span>
+                <span class="fl">FB + IG Auto-Post</span>
+                <span class="fa">→</span>
+                <span class="fl">Status Update</span>
+            </div>
+            <p class="proj-d">Write your posts in a Notion board, set a date, and walk away — the workflow publishes to Facebook and Instagram on schedule and marks each post as live, keeping your content calendar in sync.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="sec-tag">004 — CONTACT</div>
+    <h2 class="contact-h rv">
+        Got busywork?<br>
+        <a href="mailto:cadfreelance15@gmail.com?subject=Automation%20Inquiry%20%E2%80%94%20Done%20by%20Chris&body=Hi%20Chris%2C%0A%0AI%20found%20your%20site%20and%20I%27m%20interested%20in%20your%20automation%20services.%0A%0AHere%27s%20what%20I%20need%3A%0A%0A"><span class="accent-w">Let's kill it.</span></a>
+    </h2>
+    <div class="contact-row rv">
+        <p class="contact-note">Click the headline or any link below — your email app opens with my address pre-filled. Response within 24 hours.</p>
+        <div class="contact-links">
+            <a href="mailto:cadfreelance15@gmail.com" class="cl">EMAIL</a>
+            <a href="https://linkedin.com/in/christopherdumantay/" target="_blank" class="cl">LINKEDIN</a>
+            <a href="https://youtube.com/@your-channel" target="_blank" class="cl">YOUTUBE</a>
+            <a href="https://calendly.com/your-link" target="_blank" class="cl">BOOK A CALL</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <span>© 2026 CHRISTOPHER DUMANTAY</span>
+    <span>MANILA, PHILIPPINES — UTC+8</span>
+</footer>
+
+<script>
+    // ── Scroll progress bar ──
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+        document.getElementById('progress').style.width = pct + '%';
+    });
+
+    // ── Live Manila clock ──
+    function tick() {
+        const now = new Date().toLocaleTimeString('en-PH', {
+            timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit', hour12: false
+        });
+        document.getElementById('clock').textContent = 'MNL ' + now;
+    }
+    tick(); setInterval(tick, 30000);
+
+    // ── Reveal on scroll ──
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+    // ── Statement: words light up as you scroll ──
+    const stmtWords = document.querySelectorAll('#stmt span');
+    const stmtIO = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                stmtWords.forEach((w, i) => {
+                    setTimeout(() => w.classList.add('lit'), i * 55);
+                });
+                stmtIO.disconnect();
+            }
+        });
+    }, { threshold: 0.5 });
+    stmtIO.observe(document.getElementById('stmt'));
+
+    // ── Animated counters ──
+    const counters = document.querySelectorAll('.num-val[data-count]');
+    const countIO = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (!e.isIntersecting) return;
+            const el = e.target;
+            const target = parseInt(el.dataset.count);
+            const plus = el.querySelector('.plus');
+            let cur = 0;
+            const step = Math.max(1, Math.floor(target / 40));
+            const intv = setInterval(() => {
+                cur += step;
+                if (cur >= target) { cur = target; clearInterval(intv); }
+                el.childNodes[0].textContent = cur;
+            }, 30);
+            countIO.unobserve(el);
+        });
+    }, { threshold: 0.5 });
+    counters.forEach(c => countIO.observe(c));
+
+    // ── Smooth scroll ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const t = document.querySelector(a.getAttribute('href'));
+            if (t) t.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+</body>
+</html>
